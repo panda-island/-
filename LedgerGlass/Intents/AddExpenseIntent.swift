@@ -2,9 +2,9 @@ import AppIntents
 import Foundation
 
 struct AddExpenseIntent: AppIntent {
-    static var title: LocalizedStringResource = "新增支出"
-    static var description = IntentDescription("在背景新增一筆支出；類別留白時自動依商家判斷。")
-    static var openAppWhenRun = false
+    static let title: LocalizedStringResource = "新增支出"
+    static let description = IntentDescription("在背景新增一筆支出；類別留白時自動依商家判斷。")
+    static let openAppWhenRun = false
 
     @Parameter(title: "金額")
     var amount: Double
@@ -19,7 +19,7 @@ struct AddExpenseIntent: AppIntent {
     var date: Date?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("在 \(.$merchant) 新增 \(.$amount) 元支出") {
+        Summary("在 \(\.$merchant) 新增 \(\.$amount) 元支出") {
             \.$category
             \.$date
         }

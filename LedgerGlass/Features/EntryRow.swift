@@ -19,9 +19,8 @@ struct EntryRow: View {
             Spacer()
             Text("\(entry.kind == .expense ? "−" : "+")\(entry.amount.currencyText)")
                 .font(.subheadline.weight(.semibold).monospacedDigit())
-                .foregroundStyle(entry.kind == .expense ? .primary : .green)
+                .foregroundStyle(entry.kind == .expense ? Color.primary : Color.green)
         }
         .padding(.vertical, 4)
     }
 }
-
