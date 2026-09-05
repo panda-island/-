@@ -16,26 +16,18 @@
 
 1. 將此資料夾建立為 GitHub repository 並推送。
 2. 將 `project.yml` 的 `com.example.ledgerglass` 改為自己的 bundle identifier（例如 `com.你的英文名稱.ledger`）。
-3. 在 Apple Developer 網站建立相同的 App ID 與 development provisioning profile。
-4. 用 GitHub Actions 產生 IPA，安裝到 iPhone 後，在「捷徑」搜尋「新增支出」即可加入捷徑。
+3. 用 GitHub Actions 產生 IPA，再用自己的 sideload 工具安裝到 iPhone；首次開啟後，在「捷徑」搜尋「新增支出」即可加入捷徑。
 
-Windows 簽章檔的建立與 GitHub Secrets 的貼入方式，請看 [Windows 建置指南](docs/windows-github-ipa.md)。
+### GitHub 產生 sideload IPA
 
-### GitHub 產生可安裝 IPA
+工作流程位於 `.github/workflows/build-ipa.yml`，不需要 Apple Developer 會員、簽章憑證、provisioning profile 或 GitHub Secrets。
 
-工作流程位於 `.github/workflows/build-ipa.yml`。在 GitHub repository 的 **Settings → Secrets and variables → Actions** 加入：
+1. 將專案推送到 GitHub。
+2. 開啟 **Actions → Build Sideload IPA → Run workflow**。
+3. 完成後在 Artifacts 下載 `LedgerGlass-sideload-IPA`。
+4. 將下載的 `LedgerGlass-sideload.ipa` 交給自己的 sideload 工具重新簽名並安裝。
 
-| Secret | 內容 |
-| --- | --- |
-| `IOS_CERTIFICATE_BASE64` | Apple Development 憑證 `.p12` 的 Base64 |
-| `IOS_CERTIFICATE_PASSWORD` | `.p12` 密碼 |
-| `IOS_PROVISION_PROFILE_BASE64` | 對應 provisioning profile 的 Base64 |
-| `KEYCHAIN_PASSWORD` | CI 暫用 keychain 密碼 |
-| `APPLE_TEAM_ID` | 十碼 Apple Team ID |
-
-在 Actions 手動執行 **Build IPA** 並勾選 `signed_ipa`，即可下載 `LedgerGlass-IPA` artifact。Apple 的簽章是可安裝 IPA 的必要條件；未提供憑證時，流程仍會驗證 simulator build，但不會偽造一個不能安裝的 IPA。你不需要 Mac：可在 Windows 產生 CSR／`.p12`、在 Apple Developer 網站下載 provisioning profile，並把它們設為 GitHub Secrets。
-
-> bundle identifier 與 provisioning profile 必須完全相同；否則 archive 會被 Apple 簽章拒絕。
+> 這是未簽名的 device IPA，不能直接點開安裝；sideload 工具會使用你的 Apple ID 在安裝時簽名。這正是此流程設計的用途。
 
 ## 捷徑輸入對應
 
