@@ -16,6 +16,12 @@ jobs:
         run: brew install xcodegen
       - name: Generate Xcode project
         run: xcodegen generate
+      - name: Verify App Icon
+        run: |
+          ICON="LedgerGlass/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
+          WIDTH=$(sips -g pixelWidth "$ICON" | awk '/pixelWidth/ {print $2}')
+          HEIGHT=$(sips -g pixelHeight "$ICON" | awk '/pixelHeight/ {print $2}')
+          test "$WIDTH" = "1024" && test "$HEIGHT" = "1024" || (echo "App Icon 必須是 1024×1024，目前為 ${WIDTH}×${HEIGHT}"; exit 1)
       - name: Build unsigned device App
         run: |
           xcodebuild -project LedgerGlass.xcodeproj -scheme LedgerGlass -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' CONFIGURATION_BUILD_DIR="$RUNNER_TEMP/device-build" build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
